@@ -1,9 +1,15 @@
+body {
+}
 div {
-  border: 1px solid black;
+  /* border: 1px solid black; */
+  max-width: max-content;
 }
 .row {
   text-align: center;
 }
 .match {
   display: inline-block;
+}
+img.selected {
+  filter: grayscale(100%);
 }

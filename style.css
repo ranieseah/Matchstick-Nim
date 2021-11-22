@@ -1,8 +1,9 @@
 body {
+  float: none;
 }
 div {
-  /* border: 1px solid black; */
   max-width: max-content;
+  margin: 0px auto;
 }
 .row {
   text-align: center;
@@ -11,5 +12,19 @@ div {
   display: inline-block;
 }
 img.selected {
+  filter: sepia(100%);
+  text-align: center;
+}
+img.confirm {
   filter: grayscale(100%);
+  text-align: center;
+}
+.match:hover {
+  border: 1px dashed black;
+}
+body.playerA {
+  background-color: grey;
+}
+body.playerB {
+  background-color: yellow;
 }

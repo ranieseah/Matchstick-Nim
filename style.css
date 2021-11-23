@@ -1,9 +1,21 @@
 body {
+  --playerA: blue;
+  --playerB: red;
   float: none;
+  font-family: Roobert, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica,
+    Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+  color: black;
+}
+body.player1 {
+  color: var(--playerA);
+}
+body.player2 {
+  color: var(--playerB);
 }
 div {
   max-width: max-content;
   margin: 0px auto;
+  /* border: 1px solid black; */
 }
 .row {
   text-align: center;
@@ -22,9 +34,146 @@ img.confirm {
 .match:hover {
   border: 1px dashed black;
 }
-body.playerA {
-  background-color: grey;
+
+#start {
+  appearance: none;
+  background-color: transparent;
+  border: 2px solid #1a1a1a;
+  border-radius: 15px;
+  box-sizing: border-box;
+  color: #3b3b3b;
+  cursor: pointer;
+  display: inline-block;
+  font-size: 16px;
+  font-weight: 600;
+  line-height: normal;
+  margin: 10px;
+  min-height: 50px;
+  min-width: 0;
+  outline: none;
+  padding: 15px 24px;
+  text-align: center;
+  text-decoration: none;
+  transition: all 300ms cubic-bezier(0.23, 1, 0.32, 1);
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+  width: 150px;
+  will-change: transform;
 }
-body.playerB {
-  background-color: yellow;
+#start.player1 {
+  border: 2px solid var(--playerA);
+  color: var(--playerA);
+}
+#start.player2 {
+  border: 2px solid var(--playerB);
+  color: var(--playerB);
+}
+
+#start:hover {
+  color: #fff;
+  background-color: #1a1a1a;
+  box-shadow: rgba(0, 0, 0, 0.25) 0 8px 15px;
+  transform: translateY(-2px);
+}
+#start.player1:hover {
+  color: #fff;
+  background-color: var(--playerA);
+  box-shadow: rgba(0, 0, 0, 0.25) 0 8px 15px;
+  transform: translateY(-2px);
+}
+#start.player2:hover {
+  color: #fff;
+  background-color: var(--playerB);
+  box-shadow: rgba(0, 0, 0, 0.25) 0 8px 15px;
+  transform: translateY(-2px);
+}
+
+#input-box {
+  appearance: none;
+  background-color: transparent;
+  border: 2px solid #1a1a1a;
+  border-radius: 15px;
+  box-sizing: border-box;
+  color: #948e8e;
+  cursor: pointer;
+  display: inline-block;
+  font-size: 16px;
+  font-weight: 250;
+  line-height: normal;
+  margin: 0;
+  min-height: 50px;
+  min-width: 0;
+  outline: none;
+  padding: 16px 24px;
+  text-align: left;
+  text-decoration: none;
+  width: 150px;
+}
+#next.player1 {
+  appearance: none;
+  background-color: transparent;
+  border: 2px solid var(--playerA);
+  border-radius: 15px;
+  box-sizing: border-box;
+  color: var(--playerA);
+  cursor: pointer;
+  display: inline-block;
+  font-size: 16px;
+  font-weight: 600;
+  line-height: normal;
+  margin: 10px 0;
+  min-height: 50px;
+  min-width: 0;
+  outline: none;
+  padding: 16px 24px;
+  text-align: center;
+  text-decoration: none;
+  transition: all 300ms cubic-bezier(0.23, 1, 0.32, 1);
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+  width: 100%;
+  will-change: transform;
+}
+#next.player2 {
+  appearance: none;
+  background-color: transparent;
+  border: 2px solid var(--playerB);
+  border-radius: 15px;
+  box-sizing: border-box;
+  color: var(--playerB);
+  cursor: pointer;
+  display: inline-block;
+  font-size: 16px;
+  font-weight: 600;
+  line-height: normal;
+  margin: 10px 0;
+  min-height: 50px;
+  min-width: 0;
+  outline: none;
+  padding: 16px 24px;
+  text-align: center;
+  text-decoration: none;
+  transition: all 300ms cubic-bezier(0.23, 1, 0.32, 1);
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+  width: 100%;
+  will-change: transform;
+}
+
+#next.player1:hover {
+  color: #fff;
+  background-color: var(--playerA);
+  border: 2px solid var(--playerA);
+  box-shadow: rgba(0, 0, 0, 0.25) 0 8px 15px;
+  transform: translateY(-2px);
+}
+#next.player2:hover {
+  color: #fff;
+  background-color: var(--playerB);
+  border: 2px solid var(--playerB);
+  box-shadow: rgba(0, 0, 0, 0.25) 0 8px 15px;
+  transform: translateY(-2px);
 }

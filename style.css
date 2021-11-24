@@ -177,3 +177,39 @@ img.confirm {
   box-shadow: rgba(0, 0, 0, 0.25) 0 8px 15px;
   transform: translateY(-2px);
 }
+
+@media only screen and (max-width: 400px) {
+  body {
+    font-size: 0.5em;
+  }
+  div {
+    width: max-content;
+  }
+  #start {
+    font-size: 1.5em;
+    padding: 5px 10px;
+    width: 100px;
+    min-height: 40px;
+  }
+  #next.player1 {
+    font-size: 1.5em;
+    padding: 5px 10px;
+    min-height: 20px;
+    border-radius: 10px;
+  }
+  #next.player2 {
+    font-size: 1.5em;
+    padding: 5px 10px;
+    min-height: 20px;
+    border-radius: 10px;
+  }
+  #input-box {
+    padding: 5px 10px;
+    font-size: 1.5em;
+    width: 100px;
+    min-height: 40px;
+  }
+  img {
+    height: 58px;
+  }
+}

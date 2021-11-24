@@ -8,11 +8,17 @@ $(() => {
   let currentTurn = 0;
   let currentRow = 0;
   let playerTurn = "Player 1";
-  function oneMatch(num) {
+  let validSwitch = 0;
+  let timerTogOn = "";
+
+  function oneMatch(row, slot) {
     const oneMatch = document.createElement("div");
     document.querySelector(".row").prepend(oneMatch);
     oneMatch.setAttribute("class", "match");
-    oneMatch.setAttribute("value", num);
+    oneMatch.setAttribute("value", row);
+    let matchId = "match" + row + slot;
+    console.log(matchId);
+    oneMatch.setAttribute("id", matchId);
     const pic = document.createElement("img");
     pic.setAttribute("src", imgAdd);
     pic.setAttribute("class", "unselected");
@@ -25,7 +31,7 @@ $(() => {
     document.querySelector(".row").prepend(lineBreak);
 
     for (let i = num; i > 0; i--) {
-      oneMatch(num);
+      oneMatch(num, i);
       document.querySelectorAll(".match");
     }
   }
@@ -52,6 +58,32 @@ $(() => {
     }
   }
 
+  function nextTurn() {
+    console.log(
+      playerTurn,
+      "has made his choice. let see what he has selected....."
+    );
+    if (currentTurn === 0) {
+      alert("hey! you didnt make a selection..");
+    } else {
+      switch (playerTurn) {
+        case "Player 1":
+          player1.move(currentRow, currentTurn);
+
+          break;
+        case "Player 2":
+          player2.move(currentRow, currentTurn);
+          break;
+      }
+      const toConfirm = document.querySelectorAll(".selected");
+      for (let item of toConfirm) {
+        item.setAttribute("class", "confirm");
+      }
+      currentRow = 0;
+      currentTurn = 0;
+    }
+  }
+
   class Player {
     constructor(name, opponent, current, last) {
       (this.name = name),
@@ -61,24 +93,70 @@ $(() => {
     }
     switchPlayer() {
       playerTurn = this.opponent;
-      switch (playerTurn) {
-        case "Player 1":
+      if (playerTurn === "Player 1") {
+        function switchP1() {
           document.querySelector("body").setAttribute("class", "player1");
           document.querySelector("#start").setAttribute("class", "player1");
           document.querySelector("#next").setAttribute("class", "player1");
           document
             .querySelector("h1")
             .setAttribute("style", "text-align: left");
-          break;
-        case "Player 2":
+          if (timerTogOn === true) {
+            const timeDisplay = document.createElement("span");
+            timeDisplay.setAttribute("id", "timer");
+            document.querySelector("h1").append(timeDisplay);
+            let timerNum = 5;
+            const timerInt = setInterval(autoTimer, 1000);
+            function autoTimer() {
+              document.querySelector("#timer").innerText = timerNum;
+              timerNum = timerNum - 1;
+              console.log("hiP1");
+            }
+            function stopTimer() {
+              if (validSwitch === 1) {
+                clearInterval(timerInt);
+              }
+            }
+            document
+              .querySelector("#next")
+              .addEventListener("click", stopTimer);
+          }
+        }
+        switchP1();
+      } else {
+        function switchP2() {
           document.querySelector("body").setAttribute("class", "player2");
           document.querySelector("#start").setAttribute("class", "player2");
           document.querySelector("#next").setAttribute("class", "player2");
           document
             .querySelector("h1")
             .setAttribute("style", "text-align: right");
+          if (timerTogOn === true) {
+            const timeDisplay = document.createElement("span");
+            timeDisplay.setAttribute("id", "timer");
+            document.querySelector("h1").append(timeDisplay);
+            let timerNum = 5;
+            const timerInt = setInterval(autoTimer, 1000);
+            function autoTimer() {
+              document.querySelector("#timer").innerText = timerNum;
+              timerNum = timerNum - 1;
+              console.log("hiP2");
+            }
+            function stopTimer() {
+              if (validSwitch === 1) {
+                clearInterval(timerInt);
+              }
+            }
+            document
+              .querySelector("#next")
+              .addEventListener("click", stopTimer);
+          }
+        }
+
+        switchP2();
       }
     }
+
     checkStatus() {
       let sum = 0;
       for (let i = 1; i <= Object.keys(gameBoard).length; i++) {
@@ -92,6 +170,7 @@ $(() => {
           this.name,
           "took the last matchstick"
         );
+
         document.querySelector("h1").innerText = `${this.name} LOST.`;
         document.querySelector("#start").innerText = "New Game?";
         document.querySelector("#start").value = "new";
@@ -117,12 +196,14 @@ $(() => {
         ).innerText = `${this.opponent}, make your move`;
         console.log(gameBoard);
         this.switchPlayer();
+        validSwitch = 0;
       }
     }
     move(row, value) {
       gameBoard[row] -= value;
       this.checkStatus();
       this.last = value;
+      validSwitch = 1;
     }
   }
 
@@ -132,6 +213,7 @@ $(() => {
   document.querySelector("#start").addEventListener("click", pushStartButton);
   function pushStartButton(e) {
     if (e.target.value === "start") {
+      timerTogOn = timerOn.checked;
       document.querySelector("#input-box").value.length !== 1 ||
       document.querySelector("#input-box").value < 2
         ? (gameValue = 4)
@@ -140,6 +222,9 @@ $(() => {
       buildGameBoard(gameValue);
       document.querySelector("#input-box").remove();
       document.querySelector("#player").innerText = "Player 1, make your move.";
+      document.querySelector("body").setAttribute("class", "player1");
+      document.querySelector("#timerOn").remove();
+      document.querySelector("#timerLabel").remove();
       document.querySelector("#start").innerText = "Reset Turn";
       document.querySelector("#start").setAttribute("class", "player1");
       e.target.value = "reset";
@@ -147,35 +232,47 @@ $(() => {
       btn.innerText = "Confirm End of Turn";
       btn.setAttribute("id", "next");
       btn.setAttribute("class", "player1");
-      // btn.setAttribute("style", "float:right");
       document.querySelector(".row").append(btn);
-
-      document.querySelector("#next").addEventListener("click", nextTurn);
-      function nextTurn() {
-        console.log(
-          playerTurn,
-          "has made his choice. let see what he has selected....."
-        );
-        if (currentTurn === 0) {
-          alert("hey! you didnt make a selection..");
-        } else {
-          switch (playerTurn) {
-            case "Player 1":
-              player1.move(currentRow, currentTurn);
-
-              break;
-            case "Player 2":
-              player2.move(currentRow, currentTurn);
-              break;
-          }
-          const toConfirm = document.querySelectorAll(".selected");
-          for (let item of toConfirm) {
-            item.setAttribute("class", "confirm");
-          }
-          currentTurn = 0;
-          currentRow = 0;
+      if (timerTogOn === true) {
+        const timeDisplay = document.createElement("span");
+        timeDisplay.setAttribute("id", "timer");
+        document.querySelector("h1").append(timeDisplay);
+        let timerNum = 5;
+        const timerInt = setInterval(autoTimer, 1000);
+        function autoTimer() {
+          document.querySelector("#timer").innerText = timerNum;
+          timerNum = timerNum - 1;
+          console.log("hi");
         }
+        function stopTimer() {
+          if (currentTurn > 0) {
+            clearInterval(timerInt);
+            document.querySelector("#timer").innerText = "";
+          }
+        }
+
+        setTimeout(timesUp, 6000);
+        function timesUp() {
+          if (timerNum <= 0) {
+            currentTurn = 1;
+            stopTimer();
+            currentRow = Math.ceil(Math.random() * gameValue);
+            console.log("current row:", currentRow);
+            currentTurn = Math.ceil(Math.random() * Math.min(currentRow, 3));
+            console.log("current turn:", currentTurn);
+            for (let i = 1; i <= currentTurn; i++) {
+              const randomMatch = "match" + currentRow + i;
+              console.log(randomMatch);
+              document
+                .querySelector("#" + randomMatch)
+                .childNodes[0].setAttribute("class", "confirm");
+            }
+            nextTurn();
+          }
+        }
+        document.querySelector("#next").addEventListener("click", stopTimer);
       }
+      document.querySelector("#next").addEventListener("click", nextTurn);
     } else if (e.target.value === "reset") {
       if (currentRow === 0) {
         alert(

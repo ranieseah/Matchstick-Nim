@@ -111,10 +111,9 @@ $(() => {
   }
 
   class Player {
-    constructor(name, opponent, pCurrentRow, pLastRow, pLastTurn) {
+    constructor(name, opponent, pLastRow, pLastTurn) {
       (this.name = name),
         (this.opponent = opponent),
-        (this.pCurrentRow = pCurrentRow),
         (this.pLastRow = pLastRow),
         (this.pLastTurn = pLastTurn);
     }
@@ -149,7 +148,8 @@ $(() => {
         let timerNum = 5;
         const timerInt = setInterval(autoTimer, 1000);
         function autoTimer() {
-          document.querySelector("#timer").innerText = timerNum;
+          document.querySelector("#timer").innerText =
+            " Countdown: " + timerNum;
           if (timerNum > 0) {
             timerNum = timerNum - 1;
           }
@@ -169,6 +169,7 @@ $(() => {
             }
             currentRow = 0;
             currentTurn = 1;
+            stopTimer();
             while (
               gameBoard[currentRow] === undefined ||
               gameBoard[currentRow] === 0
@@ -248,7 +249,7 @@ $(() => {
         console.log("go on, there are", sum, "matchsticks left");
         document.querySelector(
           "h1"
-        ).innerText = `${this.opponent}, make your move`;
+        ).innerText = `${this.opponent}, make your move.`;
         console.log(gameBoard);
         this.switchPlayer();
       }
@@ -307,7 +308,8 @@ $(() => {
         let timerNum = 5;
         const timerInt = setInterval(autoTimer, 1000);
         function autoTimer() {
-          document.querySelector("#timer").innerText = timerNum;
+          document.querySelector("#timer").innerText =
+            " Countdown: " + timerNum;
           timerNum = timerNum - 1;
           console.log("hi");
         }

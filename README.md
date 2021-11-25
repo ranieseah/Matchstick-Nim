@@ -68,6 +68,7 @@ let turnedConfirm = 0;
    
 ```
 **use of classes**
+
 Class was used to create functions like:
 - checkStatus() 
   - checks the status of the Game Board after each turn to determine:

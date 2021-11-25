@@ -9,8 +9,11 @@ GitHub Pages: https://ranieseah.github.io/Matchstick-Nim/
 
 # What isnt working
 timer: only works for autoplay. if user makes any moves that results in alerts like confirming end of turn without selecting any matchsticks, or picking the same number of matchsticks as the previous round, the timer stops. because there's a `clearInterval` set on the confirm end of turn button.
+    --> did try the timer method with a end time, and using the current clock time Date.now(), but it didnt work out
+    --> ended up using setInterval method, but its messy to implement because of the multiple functions, and scoping issues.
 
 # What is working
+**simplifying front end**
 - being able to select and deselect the matchsticks
 ```
 function turnGrey(e) {
@@ -24,13 +27,45 @@ function turnGrey(e) {
  - set a seperate class for matchsticks at the end of each round so that it can no longer be deselected
  ```
  for (let item of toConfirm) {
-            item.setAttribute("class", "confirm");
-          }
+    item.setAttribute("class", "confirm");
+  }
  ```
  - being able to reset all selected matchsticks
  ```
-        const toReset = document.querySelectorAll(".selected");
-        for (let item of toReset) {
-          item.setAttribute("class", "unselected");
-        }
+  const toReset = document.querySelectorAll(".selected");
+  for (let item of toReset) {
+      item.setAttribute("class", "unselected");
+   }
 ```
+**simplifying back end**
+- simplifying the back end as an object
+```
+gameBoard = {1:1, 2:2, 3:3, 4:4}
+```
+- for autoplay to work, need to ensure the code didnt randomly pick an empty row. thus, use while loop
+```
+while (gameBoard[currentRow] === undefined || gameBoard[currentRow] === 0) {
+   currentRow = Math.ceil(Math.random() * Object.keys(gameBoard).length);
+}
+```
+- random pick number of matchsticks, but cannot exceed the number of matchsticks remaining in the row
+```
+currentTurn = Math.ceil(
+              Math.random() * Math.min(gameBoard[currentRow], 3)
+            );
+```
+- now, to update the front end to reflect the autoplay choices
+![image](https://user-images.githubusercontent.com/92285763/143466036-eaa80b84-e956-4d50-a2ee-7cfa1fa207b4.png)
+```
+let turnedConfirm = 0;
+   for (let i = 1; turnedConfirm < currentTurn; i++) {
+      const randomMatch = "match" + currentRow + i;
+     if (document.querySelector("#" + randomMatch).childNodes[0].className !== "confirm") {
+        turnedConfirm++;
+        document.querySelector("#" + randomMatch).childNodes[0].setAttribute("class", "confirm");
+     }
+   }
+   
+```
+# What could be done better
+the flow and the tidiness of the code. the code seems to be jumping back and forth because i keep building it line by line, function by function. i didnt plan out the whole big picture then work to the details. 

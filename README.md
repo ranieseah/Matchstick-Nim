@@ -67,5 +67,21 @@ let turnedConfirm = 0;
    }
    
 ```
+**use of classes**
+Class was used to create functions like:
+- checkStatus() 
+  - checks the status of the Game Board after each turn to determine:
+    1. how many sticks left
+    2. one stick left, meaning the next player is the losing party
+    3. no sticks left, current player is the losing part
+- move()
+  1. updates the backend gameboard
+  2. runs checkStatus()
+  3. stores the moves for comparison on the next round and updates onto HTML
+- switchPlayer()
+  - updates the classes, which changes the color, controlled by CSS. 
+
+On hindsight, the use of class made it difficult to rearrange and tidy up by functions. Might have had a better outcome if class wasnt used.
+
 # What could be done better
 the flow and the tidiness of the code. the code seems to be jumping back and forth because i keep building it line by line, function by function. i didnt plan out the whole big picture then work to the details. 

@@ -13,7 +13,7 @@ timer: only works for autoplay. if user makes any moves that results in alerts l
     --> ended up using setInterval method, but its messy to implement because of the multiple functions, and scoping issues.
 
 # What is working
-**simplifying front end**
+### simplifying front end
 - being able to select and deselect the matchsticks
 ```
 function turnGrey(e) {
@@ -37,7 +37,7 @@ function turnGrey(e) {
       item.setAttribute("class", "unselected");
    }
 ```
-**simplifying back end**
+### simplifying back end
 - simplifying the back end as an object
 ```
 gameBoard = {1:1, 2:2, 3:3, 4:4}
@@ -67,7 +67,7 @@ let turnedConfirm = 0;
    }
    
 ```
-**use of classes**
+### use of classes
 
 Class was used to create functions like:
 - checkStatus() 

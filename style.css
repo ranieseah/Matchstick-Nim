@@ -177,7 +177,15 @@ img.confirm {
   box-shadow: rgba(0, 0, 0, 0.25) 0 8px 15px;
   transform: translateY(-2px);
 }
+#prevplay1 {
+  float: left;
+  color: var(--playerA);
+}
 
+#prevplay2 {
+  float: right;
+  color: var(--playerB);
+}
 @media only screen and (max-width: 400px) {
   body {
     font-size: 0.5em;

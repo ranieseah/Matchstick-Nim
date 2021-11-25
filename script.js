@@ -8,8 +8,8 @@ $(() => {
   let currentTurn = 0;
   let currentRow = 0;
   let playerTurn = "Player 1";
-  let validSwitch = 0;
   let timerTogOn = "";
+  let autoplay = 0;
 
   function oneMatch(row, slot) {
     const oneMatch = document.createElement("div");
@@ -63,34 +63,62 @@ $(() => {
       playerTurn,
       "has made his choice. let see what he has selected....."
     );
+    let gameBoardMax = [];
+    for (let i = 1; i <= Object.keys(gameBoard).length; i++) {
+      gameBoardMax.push(gameBoard[i]);
+    }
+
+    gameBoardMax.sort(function (a, b) {
+      return b - a;
+    });
+
     if (currentTurn === 0) {
       alert("hey! you didnt make a selection..");
+    } else if (
+      ((playerTurn === "Player 1" &&
+        currentTurn == document.querySelector("#p1prevTurn").innerText) ||
+        (playerTurn === "Player 2" &&
+          currentTurn == document.querySelector("#p2prevTurn").innerText)) &&
+      autoplay === 0 &&
+      gameBoardMax[0] > 1
+    ) {
+      alert(
+        "sorry! you have to pick a different number of matches from previous round!"
+      );
+      console.log(!(currentTurn === 1 && gameBoardMax[0] === 1));
     } else {
+      autoplay = 0;
+      const toConfirm = document.querySelectorAll(".selected");
       switch (playerTurn) {
         case "Player 1":
-          player1.move(currentRow, currentTurn);
-
+          player1.move("p1", currentRow, currentTurn);
+          for (let item of toConfirm) {
+            item.setAttribute("class", "confirm");
+          }
           break;
         case "Player 2":
-          player2.move(currentRow, currentTurn);
+          player2.move("p2", currentRow, currentTurn);
+          for (let item of toConfirm) {
+            item.setAttribute("class", "confirm");
+          }
           break;
       }
-      const toConfirm = document.querySelectorAll(".selected");
-      for (let item of toConfirm) {
-        item.setAttribute("class", "confirm");
-      }
+
       currentRow = 0;
+      document.querySelector("#curRow").innerText = "";
       currentTurn = 0;
     }
   }
 
   class Player {
-    constructor(name, opponent, current, last) {
+    constructor(name, opponent, pCurrentRow, pLastRow, pLastTurn) {
       (this.name = name),
         (this.opponent = opponent),
-        (this.current = current),
-        (this.last = last);
+        (this.pCurrentRow = pCurrentRow),
+        (this.pLastRow = pLastRow),
+        (this.pLastTurn = pLastTurn);
     }
+
     switchPlayer() {
       playerTurn = this.opponent;
       if (playerTurn === "Player 1") {
@@ -101,26 +129,6 @@ $(() => {
           document
             .querySelector("h1")
             .setAttribute("style", "text-align: left");
-          if (timerTogOn === true) {
-            const timeDisplay = document.createElement("span");
-            timeDisplay.setAttribute("id", "timer");
-            document.querySelector("h1").append(timeDisplay);
-            let timerNum = 5;
-            const timerInt = setInterval(autoTimer, 1000);
-            function autoTimer() {
-              document.querySelector("#timer").innerText = timerNum;
-              timerNum = timerNum - 1;
-              console.log("hiP1");
-            }
-            function stopTimer() {
-              if (validSwitch === 1) {
-                clearInterval(timerInt);
-              }
-            }
-            document
-              .querySelector("#next")
-              .addEventListener("click", stopTimer);
-          }
         }
         switchP1();
       } else {
@@ -131,29 +139,76 @@ $(() => {
           document
             .querySelector("h1")
             .setAttribute("style", "text-align: right");
-          if (timerTogOn === true) {
-            const timeDisplay = document.createElement("span");
-            timeDisplay.setAttribute("id", "timer");
-            document.querySelector("h1").append(timeDisplay);
-            let timerNum = 5;
-            const timerInt = setInterval(autoTimer, 1000);
-            function autoTimer() {
-              document.querySelector("#timer").innerText = timerNum;
-              timerNum = timerNum - 1;
-              console.log("hiP2");
-            }
-            function stopTimer() {
-              if (validSwitch === 1) {
-                clearInterval(timerInt);
-              }
-            }
-            document
-              .querySelector("#next")
-              .addEventListener("click", stopTimer);
+        }
+        switchP2();
+      }
+      if (timerTogOn === true) {
+        const timeDisplay = document.createElement("span");
+        timeDisplay.setAttribute("id", "timer");
+        document.querySelector("h1").append(timeDisplay);
+        let timerNum = 5;
+        const timerInt = setInterval(autoTimer, 1000);
+        function autoTimer() {
+          document.querySelector("#timer").innerText = timerNum;
+          if (timerNum > 0) {
+            timerNum = timerNum - 1;
           }
         }
 
-        switchP2();
+        function stopTimer() {
+          clearInterval(timerInt);
+          document.querySelector("#timer").innerText = "";
+        }
+
+        setTimeout(timesUp, 6000);
+        function timesUp() {
+          if (timerNum <= 0) {
+            const toReset = document.querySelectorAll(".selected");
+            for (let item of toReset) {
+              item.setAttribute("class", "unselected");
+            }
+            currentRow = 0;
+            currentTurn = 1;
+            while (
+              gameBoard[currentRow] === undefined ||
+              gameBoard[currentRow] === 0
+            ) {
+              currentRow = Math.ceil(
+                Math.random() * Object.keys(gameBoard).length
+              );
+            }
+
+            currentTurn = Math.ceil(
+              Math.random() * Math.min(gameBoard[currentRow], 3)
+            );
+            console.log("autoplay chose: ", currentRow, currentTurn);
+            alert(
+              "TOO SLOW! autoplay has chosen: [Row: " +
+                currentRow +
+                "] , [number of Match: " +
+                currentTurn +
+                "]"
+            );
+            autoplay = 1;
+            let turnedConfirm = 0;
+            for (let i = 1; turnedConfirm < currentTurn; i++) {
+              const randomMatch = "match" + currentRow + i;
+              if (
+                document.querySelector("#" + randomMatch).childNodes[0]
+                  .className !== "confirm"
+              ) {
+                turnedConfirm++;
+
+                console.log(randomMatch);
+                document
+                  .querySelector("#" + randomMatch)
+                  .childNodes[0].setAttribute("class", "confirm");
+              }
+            }
+            nextTurn();
+          }
+        }
+        document.querySelector("#next").addEventListener("click", stopTimer);
       }
     }
 
@@ -196,14 +251,17 @@ $(() => {
         ).innerText = `${this.opponent}, make your move`;
         console.log(gameBoard);
         this.switchPlayer();
-        validSwitch = 0;
       }
     }
-    move(row, value) {
+    move(player, row, value) {
       gameBoard[row] -= value;
       this.checkStatus();
-      this.last = value;
-      validSwitch = 1;
+      this.pLastRow = row;
+      this.pLastTurn = value;
+      document.querySelector("#" + player + "prevRow").innerText =
+        this.pLastRow;
+      document.querySelector("#" + player + "prevTurn").innerText =
+        this.pLastTurn;
     }
   }
 
@@ -233,6 +291,15 @@ $(() => {
       btn.setAttribute("id", "next");
       btn.setAttribute("class", "player1");
       document.querySelector(".row").append(btn);
+      document
+        .querySelector("#rowSelect")
+        .setAttribute("style", "display:block");
+      document
+        .querySelector("#prevplay1")
+        .setAttribute("style", "display:block");
+      document
+        .querySelector("#prevplay2")
+        .setAttribute("style", "display:block");
       if (timerTogOn === true) {
         const timeDisplay = document.createElement("span");
         timeDisplay.setAttribute("id", "timer");
@@ -254,12 +321,24 @@ $(() => {
         setTimeout(timesUp, 6000);
         function timesUp() {
           if (timerNum <= 0) {
+            const toReset = document.querySelectorAll(".selected");
+            for (let item of toReset) {
+              item.setAttribute("class", "unselected");
+            }
+            currentRow = 0;
             currentTurn = 1;
             stopTimer();
             currentRow = Math.ceil(Math.random() * gameValue);
             console.log("current row:", currentRow);
             currentTurn = Math.ceil(Math.random() * Math.min(currentRow, 3));
             console.log("current turn:", currentTurn);
+            alert(
+              "TOO SLOW! autoplay has chosen: [Row: " +
+                currentRow +
+                "] , [number of Match: " +
+                currentTurn +
+                "]"
+            );
             for (let i = 1; i <= currentTurn; i++) {
               const randomMatch = "match" + currentRow + i;
               console.log(randomMatch);
@@ -286,6 +365,7 @@ $(() => {
         }
         currentTurn = 0;
         currentRow = 0;
+        document.querySelector("#curRow").innerText = "";
         console.log("reset button pressed");
         alert("ok la - u can pick another row now..");
       }
@@ -312,6 +392,7 @@ $(() => {
             turnGrey(e);
             currentTurn += 1;
             console.log("matchsticks select count:", currentTurn);
+            document.querySelector("#curRow").innerText = currentRow;
           }
         } else if (e.target.className === "confirm") {
           alert("oops! you cant unburn a matchstick from the previous round.");

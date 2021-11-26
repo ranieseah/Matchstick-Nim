@@ -9,7 +9,7 @@ GitHub Pages: https://ranieseah.github.io/Matchstick-Nim/
 
 # What isnt working
 timer: only works for autoplay. if user makes any moves that results in alerts like confirming end of turn without selecting any matchsticks, or picking the same number of matchsticks as the previous round, the timer stops. because there's a `clearInterval` set on the confirm end of turn button.
-  - did try the timer method with a end time, and using the current clock time Date.now(), but it didnt work out
+  - tried the timer method with a end time, and using the current clock time Date.now(), but it didnt work out
   - ended up using setInterval method, but its messy to implement because of the multiple functions, and scoping issues.
 
 # What is working

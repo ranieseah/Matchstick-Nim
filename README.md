@@ -1,5 +1,5 @@
 # Matchstick-Nim
-SEI33 Project 1 (Javascript, HTML, CSS)
+Coding Project (Javascript, HTML, CSS)
 
 GitHub Pages: https://ranieseah.github.io/Matchstick-Nim/
 

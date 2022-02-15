@@ -1,7 +1,7 @@
 # Matchstick-Nim
 Coding Project (Javascript, HTML, CSS)
 
-GitHub Pages: https://ranieseah.github.io/Matchstick-Nim/
+Deployed on GitHub Pages: https://ranieseah.github.io/Matchstick-Nim/
 
 # The Game
 - objective of the game is to not pick the last matchstick.

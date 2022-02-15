@@ -13,7 +13,9 @@ timer: only works for autoplay. if user makes any moves that results in alerts l
   - ended up using setInterval method, but its messy to implement because of the multiple functions, and scoping issues.
 
 # What is working
-### simplifying front end
+#### I split the logic of what is seen on screen from the game logic in the background for simplicity.. 
+
+### Onscreen
 - being able to select and deselect the matchsticks
 ```
 function turnGrey(e) {
@@ -37,7 +39,7 @@ function turnGrey(e) {
       item.setAttribute("class", "unselected");
    }
 ```
-### simplifying back end
+### Game Logic
 - simplifying the back end as an object
 ```
 gameBoard = {1:1, 2:2, 3:3, 4:4}
